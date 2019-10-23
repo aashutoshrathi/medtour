@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+
+[packages]
+django = "*"
+gunicorn = "*"
+django-heroku = "*"
+django-progressive-web-app = "*"
+social-auth-app-django = '*'
+python-decouple = '*'
+django-widget-tweaks = '*'
+django-cities-light = '*'
+django-filter = '*'
+django-datetime-widget = '*'
+
+[requires]
+python_version = "3.7.4"
+
+[dev-packages]
+autopep8 = "*"

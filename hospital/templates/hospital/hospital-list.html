@@ -1,0 +1,109 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+
+{% block title %}
+    Hospitals | MedTour
+{% endblock %}
+
+{% block body %}
+    <div class="uk-container uk-margin-top">
+        <div action="/hospital/list/" method="post" class="uk-margin-small uk-grid-match" uk-grid>
+            <div class="uk-inline uk-width-3-5@s">
+                <input class="uk-input" name="search_box_city" id="search_box_city" type="text" placeholder="Enter your city..." data-suggest-url="{% url 'ajax_autocomplete' %}"
+                {% if search_box_city_value %}
+                    value="{{ search_box_city_value }}"
+                {% endif %}>
+            </div>
+            <div class="uk-width-1-5@s">
+                <a id="hospital-filter-button" class="uk-button uk-border-rounded uk-padding-remove-left uk-padding-remove-right uk-button-secondary" href="#">search <span uk-icon=" icon: search;"></span></a>
+            </div>
+        </div>
+        <div class="uk-child-width-1-4@m uk-grid-small uk-grid-match" uk-grid>
+            {% if hospitals %}
+                {% for hospital in hospitals %}
+                    <div>
+                        <div class="uk-card hover-shadow-card uk-card-secondary uk-padding-small uk-border-rounded">
+                            <h3 class="uk-card-title"> <a class="uk-link-heading" href="{{ hospital.get_url }}">{{ hospital.name }}</a></h3>
+                            <div class="uk-card-body uk-padding-remove">
+                                <p>
+                                    {% with ''|center:hospital.rating as range %}
+                                        {% for _ in range %}
+                                            <span
+                                                {% if hospital.rating >= 3 %}
+                                                    class="uk-text-bold uk-text-success"
+                                                {% elif hospital.rating >= 2 and hospital.rating < 3 %}
+                                                    class="uk-text-bold uk-text-warning"
+                                                {% else %}
+                                                    class="uk-text-bold"
+                                                {% endif %}
+
+                                                uk-icon="star">
+                                            </span>
+                                        {% endfor %}
+                                    {% endwith %}
+                                </p>
+                                <div class="closer">
+                                    <p><span class="uk-text-bold uk-text-danger uk-margin-small-right" uk-icon="location"></span>{{ hospital.address }}</p>
+                                    <div class="uk-margin-small-top uk-padding-remove"><p><strong>City:</strong> {{ hospital.user.profile.city.display_name }}</p></div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="uk-card-footer uk-padding-remove uk-margin-small-top">
+                                {% if hospital.phone_number %}
+                                    <p><a href="tel:{{ hospital.phone_number }}" class="uk-icon-button" uk-icon="receiver"></a> {{ hospital.phone_number }}</p>
+                                {% endif %}
+
+                                {% if hospital.email %}
+                                    <p><a href="mailto:{{ hospital.email }}" class="uk-icon-button" uk-icon="mail"></a> {{ hospital.email }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h1 class="uk-text-center uk-text-danger">No hospitals found</h1>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        $("#search_box_city").on('keyup', function(e){
+            let value = $(this).val();
+            let url = $("#search_box_city").attr("data-suggest-url");
+            $.ajax({
+                url: url,
+                data: {
+                  'search': value
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var list = data.list;
+                    $("#search_box_city").autocomplete({
+                        autoFocus: true,
+                        source: list,
+                        minLength: 1
+                    });
+                }
+            });
+        });
+        $("#search_box_city").on("keydown",function search(e) {
+            if(e.keyCode == 13) {
+                if($("#search_box_city").val() != '') {
+                    filterHospital();
+                }
+            }
+        });
+        $("#hospital-filter-button").click( function() {
+            if($("#search_box_city").val() != '') {
+                filterHospital();
+            }
+        });
+        function filterHospital() {
+            var query_string_city = encodeURI($("#search_box_city").val());
+            var url = window.location.origin + '/hospital/list/' + '?q=' + query_string_city;
+            window.location.assign(url);
+        }
+    </script>
+{% endblock %}
+
+

@@ -1,0 +1,39 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+
+{% block title %}
+    Book an appointment | MedTour
+{% endblock %}
+
+{% block body %}
+    {{ form.media }}
+        <div class="uk-card-hover uk-border-rounded uk-card-default uk-card-body uk-width-1-2@m uk-margin-top uk-align-center">
+             <form enctype="multipart/form-data" class="uk-table-responsive entry-input-form" action="#" method="post" novalidate>
+                {% csrf_token %}
+                <table class="uk-table">
+                    <thead>
+                        <tr>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for field in form %}
+                            <tr>
+                                <td class="uk-text-bold">{{ field.label }}</td>
+                                <td>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                      <p class="uk-text-warning">{{ field.help_text }}</p>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                      <p class="uk-text-danger">{{ error }}</p>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <input class="uk-width-auto uk-button uk-button-secondary uk-margin-small uk-align-center uk-border-rounded" type="reset" value="Clear changes"/>
+                <input class="uk-width-auto uk-button uk-button-primary uk-margin-small uk-align-center uk-border-rounded" type="submit" value="Submit" />
+            </form>
+        </div>
+{% endblock %}
