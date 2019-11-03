@@ -4,6 +4,7 @@ from django.contrib.auth import update_session_auth_hash, authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.utils.html import strip_tags
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -89,15 +90,16 @@ def signup(request):
             user.save()
             current_site = get_current_site(request)
             subject = 'Activate Your MedTour Account'
-            org_email = settings.EMAIL_HOST_USER
+            from_email = settings.EMAIL_HOST_USER
             message = render_to_string('registration/account_activation_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': force_text(urlsafe_base64_encode(force_bytes(user.pk))),
                 'token': account_activation_token.make_token(user),
             })
-            user.email_user(subject, message)
-            send_mail(subject, message, org_email, [user.email, org_email], fail_silently=True)
+            print('activate/{}/{}', force_text(urlsafe_base64_encode(force_bytes(user.pk))), account_activation_token.make_token(user))
+            plain_msg = strip_tags(message)
+            send_mail(subject, plain_msg, from_email, [user.email], html_message=message, fail_silently=True)
             return redirect('account_activation_sent')
     else:
         form = SignUpForm()

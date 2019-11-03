@@ -43,7 +43,8 @@ class Hospital(models.Model):
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True, help_text="Please enter "
                                                                                                    "valid phone "
                                                                                                    "number.")
-    specialisation = models.ManyToManyField(Specialisation, related_name='speciality_of_hospital')
+    specialisation = models.ManyToManyField(
+        Specialisation, related_name='speciality_of_hospital')
     verified = models.BooleanField(default=False)
 
     def __str__(self):
@@ -73,8 +74,10 @@ class Doctor(models.Model):
         MaxValueValidator(5),
         MinValueValidator(1),
     ])
-    hospital = models.ForeignKey(Hospital, related_name='doctor', on_delete=models.CASCADE)
-    specialisation = models.ManyToManyField(Specialisation, related_name='speciality')
+    hospital = models.ForeignKey(
+        Hospital, related_name='doctor', on_delete=models.CASCADE)
+    specialisation = models.ManyToManyField(
+        Specialisation, related_name='speciality')
 
     def __str__(self):
         return self.name

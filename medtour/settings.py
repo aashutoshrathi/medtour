@@ -19,15 +19,12 @@ from decouple import config
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'medtour/static/js', 'serviceworker.js')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-
 # Emails
 
 EMAIL_USE_TLS = config('EMAIL_USE_TLS')
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = config('SG_API_KEY')
 EMAIL_PORT = config('EMAIL_PORT')
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -130,18 +127,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    # },
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
 ]
 
 
@@ -187,12 +184,8 @@ PWA_APP_ICONS = [
 
 django_heroku.settings(locals())
 
-SOCIAL_AUTH_GITHUB_KEY = config('GH_KEY')
-SOCIAL_AUTH_GITHUB_SECRET = config('GH_SKEY')
 SOCIAL_AUTH_TWITTER_KEY = config('TW_KEY')
 SOCIAL_AUTH_TWITTER_SECRET = config('TW_SKEY')
-SOCIAL_AUTH_FACEBOOK_KEY = config('FB_KEY')
-SOCIAL_AUTH_FACEBOOK_SECRET = config('FB_SKEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('G_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('G_SKEY')
 
