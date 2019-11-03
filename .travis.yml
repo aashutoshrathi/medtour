@@ -25,7 +25,7 @@ env:
   -EMAIL_USE_TLS=True
   -EMAIL_HOST=smtp.2am.com
   -EMAIL_HOST_USER=gmail@2amdev.com
-  -EMAIL_HOST_PASSWORD=password
+  -SG_API_KEY=password
   -EMAIL_PORT=7894
 
 install:
