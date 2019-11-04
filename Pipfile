@@ -13,6 +13,7 @@ django-widget-tweaks = '*'
 django-cities-light = '*'
 django-filter = '*'
 django-datetime-widget = '*'
+django-livesync = "*"
 
 [requires]
 python_version = "3.7.4"

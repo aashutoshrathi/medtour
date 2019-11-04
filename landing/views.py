@@ -14,6 +14,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
 from social_django.models import UserSocialAuth
 from hospital.models import Doctor, Appointment, Hospital
+from hospital.forms import InviteDocForm
 from landing.models import Region, City, Profile
 from landing.tokens import account_activation_token
 from medtour import settings
@@ -36,7 +37,8 @@ class CompleteHospitalProfile(View):
             messages.success(request, 'Your profile was successfully updated!')
             return redirect('home')
         else:
-            messages.error(request, 'Slug is already taken, please try another one.')
+            messages.error(
+                request, 'Slug is already taken, please try another one.')
             return render(request, 'landing/hospital_profile_complete.html', {'form': form})
 
 
@@ -50,12 +52,14 @@ class ChangeUsername(View):
         if form.is_valid():
             form = UsernameForm(request.POST, instance=request.user)
             form.save()
-            messages.success(request, 'Your username was successfully updated!')
+            messages.success(
+                request, 'Your username was successfully updated!')
             update_session_auth_hash(request, request.user)
             return redirect('username')
         else:
             print(request.user.username)
-            messages.error(request, 'Username is already taken, please try another one.')
+            messages.error(
+                request, 'Username is already taken, please try another one.')
         return render(request, 'landing/username.html', {'form': form})
 
 
@@ -70,7 +74,8 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.profile.email_confirmed = True
         user.save()
-        hospital = Hospital(user=user, email=user.email, name=user.first_name, slug=user.username).save()
+        hospital = Hospital(user=user, email=user.email,
+                            name=user.first_name, slug=user.username).save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('complete_hospital_profile')
     else:
@@ -97,9 +102,11 @@ def signup(request):
                 'uid': force_text(urlsafe_base64_encode(force_bytes(user.pk))),
                 'token': account_activation_token.make_token(user),
             })
-            print('activate/{}/{}', force_text(urlsafe_base64_encode(force_bytes(user.pk))), account_activation_token.make_token(user))
+            print('activate/{}/{}', force_text(urlsafe_base64_encode(force_bytes(user.pk))),
+                  account_activation_token.make_token(user))
             plain_msg = strip_tags(message)
-            send_mail(subject, plain_msg, from_email, [user.email], html_message=message, fail_silently=True)
+            send_mail(subject, plain_msg, from_email, [
+                      user.email], html_message=message, fail_silently=True)
             return redirect('account_activation_sent')
     else:
         form = SignUpForm()
@@ -114,17 +121,32 @@ class HomeView(View):
             if request.user.hospital:
                 hospital = request.user.hospital
                 doctors = Doctor.objects.filter(hospital=hospital)
-                hospital_appointments = Appointment.objects.filter(doctor__in=doctors)
+                hospital_appointments = Appointment.objects.filter(
+                    doctor__in=doctors)
+                form = InviteDocForm(request.POST or None)
                 return render(request, 'landing/home.html', {'doctors': doctors,
                                                              'happs': hospital_appointments,
+                                                             'form': form
                                                              })
         except Hospital.DoesNotExist:
             pass
-        patient_appointments = Appointment.objects.filter(patient__user=request.user) or None
+        patient_appointments = Appointment.objects.filter(
+            patient__user=request.user) or None
         return render(request, 'landing/patient_home.html', {'doctors': doctors,
-                                                     'happs': hospital_appointments,
-                                                     'papps': patient_appointments,
-                                                     })
+                                                             'happs': hospital_appointments,
+                                                             'papps': patient_appointments,
+                                                             })
+
+    def post(self, request):
+        form = InviteDocForm(request.POST or None)
+        if form.is_valid():
+            doctor = form.save(commit=False)
+            doctor.hospital = Hospital.objects.get(
+                slug=request.user.hospital.slug)
+            doctor.slug = doctor.user.username
+            form.save()
+            return redirect('home')
+        return render(request, 'landing/home.html', {'form': form})
 
 
 # only4 testing
@@ -151,7 +173,8 @@ class AccountOverview(View):
         except UserSocialAuth.DoesNotExist:
             facebook_login = None
 
-        can_disconnect = (user.social_auth.count() > 1 or user.has_usable_password())
+        can_disconnect = (user.social_auth.count() >
+                          1 or user.has_usable_password())
         form = ProfileForm(instance=request.user.profile)
         return render(request, 'landing/profile.html', {
             'twitter_login': twitter_login,
@@ -192,7 +215,8 @@ class PasswordChangeView(View):
             if form.is_valid():
                 form.save()
                 update_session_auth_hash(request, form.user)
-                messages.success(request, 'Your password was successfully updated!')
+                messages.success(
+                    request, 'Your password was successfully updated!')
                 return redirect('password')
             else:
                 messages.error(request, 'Please correct the error below.')

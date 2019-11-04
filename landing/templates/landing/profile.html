@@ -62,7 +62,13 @@
                                     <li class="uk-text-meta">Username</li>
                                     <li>{{ user.username }}</li>
                                     {% if user.profile.dob %}
-                                        <li class="uk-text-meta">Date of birth</li>
+                                        <li class="uk-text-meta">
+                                            {% if user.hospital %}
+                                                Establishment Date
+                                            {% else %}
+                                                Date of Birth
+                                            {% endif %}
+                                        </li>
                                         <li>{{ user.profile.dob }}</li>
                                     {% endif %}
                                     {% if user.profile.gender != 'n' and user.profile.gender %}
@@ -81,7 +87,7 @@
                                         <li class="uk-text-meta">Address</li>
                                         <li>{{ user.profile.city }}</li>
                                     {% endif %}
-                                    <a class="uk-button uk-button-default uk-align-center uk-width-auto uk-margin-small-top uk-border-rounded uk-button-secondary" href="#profile-edit-form" uk-toggle>Edit Profile</a>
+                                    <a class="uk-button uk-align-center uk-align-center uk-width-1-4 uk-margin-small-top uk-border-pill uk-button-secondary" href="#profile-edit-form" uk-toggle>Edit Profile <span uk-icon="icon: pencil;"></span></a>
                                 </ul>
                                 <hr>
                                 {% if user.profile.mail_notifications_allowed %}
@@ -209,13 +215,21 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="uk-text-bold">{{ form.dob.label }}</td>
+                            <td class="uk-text-bold">
+                                {% if user.hospital %}
+                                    Establishment Date
+                                {% else %}
+                                    Date of Birth
+                                {% endif %}
+                            </td>
                             <td>{{ form.dob }}</td>
                         </tr>
+                        {% if not user.hospital %}
                         <tr>
                             <td class="uk-text-bold">{{ form.gender.label }}</td>
                             <td>{{ form.gender }}</td>
                         </tr>
+                        {% endif %}
                         <tr>
                             <td class="uk-text-bold">{{ form.country.label }}</td>
                             <td>{{ form.country }}</td>
@@ -250,8 +264,10 @@
                         </tr>
                     </tbody>
                 </table>
-                <input class="uk-width-1-1 uk-button uk-button-primary uk-margin-small-bottom uk-border-rounded" type="submit" value="Submit" />
-                <input class="uk-width-1-1 uk-button uk-button-secondary  uk-border-rounded" type="reset" value="Clear all changes"/>
+                <div class="uk-text-center">
+                    <input class="uk-width-1-3 uk-button uk-button-primary uk-border-pill uk-display-inline-block" type="submit" value="Update" />
+                    <input class="uk-width-1-3 uk-button uk-margin-auto-right uk-button-secondary uk-border-pill" type="reset" value="Reset"/>
+                </div>
             </form>
         </div>
     </div>

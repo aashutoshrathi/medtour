@@ -1,6 +1,6 @@
 import datetime
 from datetimewidget.widgets import DateTimeWidget
-from .models import Appointment
+from .models import Appointment, Doctor
 from django import forms
 
 
@@ -34,3 +34,20 @@ class AppointmentForm(forms.ModelForm):
             'start_date': DateTimeWidget(options=dateTimeOptions),
             'end_date': DateTimeWidget(options=dateTimeOptions),
         }
+
+
+class InviteDocForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(InviteDocForm, self).__init__(*args, **kwargs)
+        self.fields['user'].label = 'User'
+        self.fields['user'].widget.attrs.update({
+            'class': 'uk-width-auto uk-input'
+        })
+
+        self.fields['name'].label = 'Name'
+        self.fields['name'].widget.attrs.update({
+            'class': 'uk-width-auto uk-input'
+        })
+    class Meta:
+        model = Doctor
+        fields = {'user', 'name'}

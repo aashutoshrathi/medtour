@@ -80,7 +80,7 @@ class Doctor(models.Model):
         Specialisation, related_name='speciality')
 
     def __str__(self):
-        return self.name
+        return self.name or 'No Name'
 
     def get_url(self):
         return reverse('hospital:doctor-home', args=[self.slug])
