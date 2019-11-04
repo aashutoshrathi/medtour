@@ -84,7 +84,8 @@ class HospitalsAll(View):
         search_box_city_value = None
         if 'q' in request.GET:
             search_box_city_value = request.GET['q']
-        hospitals = Hospital.objects.filter(verified=True)
+        hospitals = Hospital.objects.all()
+        print(hospitals)
         if search_box_city_value is not None:
             search_box_city_value_trimmed = "".join(search_box_city_value.split())
             city_name = search_box_city_value_trimmed.split(',')

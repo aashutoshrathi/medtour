@@ -17,7 +17,7 @@ from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'medtour/static/js', 'serviceworker.js')
+# PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'medtour/static/js', 'serviceworker.js')
 
 # Emails
 
@@ -169,18 +169,18 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "medtour/static"),
 ]
 
-PWA_APP_NAME = 'MedTour'
-PWA_APP_DESCRIPTION = "A sexy description, which will blow your mind."
-PWA_APP_THEME_COLOR = '#455A64'
-PWA_APP_DISPLAY = 'standalone'
-PWA_APP_START_URL = '/'
-PWA_APP_ICONS = [
-    {
-        'src': 'static/icons/icon-192x192.png',
-        'sizes': '192x192',
-        "type": "image/png"
-    }
-]
+# PWA_APP_NAME = 'MedTour'
+# PWA_APP_DESCRIPTION = "A sexy description, which will blow your mind."
+# PWA_APP_THEME_COLOR = '#455A64'
+# PWA_APP_DISPLAY = 'standalone'
+# PWA_APP_START_URL = '/'
+# PWA_APP_ICONS = [
+#     {
+#         'src': 'static/icons/icon-192x192.png',
+#         'sizes': '192x192',
+#         "type": "image/png"
+#     }
+# ]
 
 django_heroku.settings(locals())
 
