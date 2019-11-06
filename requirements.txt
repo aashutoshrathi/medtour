@@ -9,3 +9,4 @@ django-widget-tweaks
 django-cities-light
 django-filter
 django-datetime-widget
+whitenoise
