@@ -14,6 +14,7 @@ django-cities-light = '*'
 django-filter = '*'
 django-datetime-widget = '*'
 django-livesync = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.7.4"

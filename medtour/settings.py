@@ -66,6 +66,7 @@ MIDDLEWARE = [
 
 MIDDLEWARE_CLASSES = (
     'livesync.core.middleware.DjangoLiveSyncMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 )
 
 DJANGO_LIVESYNC = {
@@ -115,7 +116,7 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 WSGI_APPLICATION = 'medtour.wsgi.application'
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
