@@ -17,8 +17,8 @@ from hospital.models import Doctor, Appointment, Hospital
 from hospital.forms import InviteDocForm
 from landing.models import Region, City, Profile
 from landing.tokens import account_activation_token
-from medtour import settings
 from .forms import ProfileForm, UsernameForm, SignUpForm, HospitalForm
+from medtour import settings
 
 
 def land(request):
@@ -102,8 +102,6 @@ def signup(request):
                 'uid': force_text(urlsafe_base64_encode(force_bytes(user.pk))),
                 'token': account_activation_token.make_token(user),
             })
-            print('activate/{}/{}', force_text(urlsafe_base64_encode(force_bytes(user.pk))),
-                  account_activation_token.make_token(user))
             plain_msg = strip_tags(message)
             send_mail(subject, plain_msg, from_email, [
                       user.email], html_message=message, fail_silently=True)
@@ -133,6 +131,15 @@ class HomeView(View):
                                                              'message': message
                                                              })
         except Hospital.DoesNotExist:
+            pass
+        try:
+            if request.user.doctor:
+                slug = request.user.doctor.slug
+                doctor = Doctor.objects.get(slug=slug)
+                doc_appointments = Appointment.objects.filter(
+                    doctor=doctor)
+                return render(request, 'landing/doc_home.html', {'happs': doc_appointments})
+        except Doctor.DoesNotExist:
             pass
         patient_appointments = Appointment.objects.filter(
             patient__user=request.user) or None

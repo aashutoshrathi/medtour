@@ -1,0 +1,112 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+{% block title %}
+    {% if user.hospital %}
+        Dashboard | {{ user.doctor.name }}
+    {% else %}
+        MedTour | Home
+    {% endif %}
+{% endblock %}
+{% block body %}
+    <div class="uk-container">
+        <h2 class="uk-padding-small uk-text-center uk-text-bold">Dashboard</h2>
+        {% if user.doctor %}
+            <h3 class="uk-text-lead uk-text-bold uk-text-center">{{ user.doctor.name }}</h3>
+            <div class="uk-text-center" id="details-hospital">
+                {% if user.doctor.phone_number %}
+                    <p><a href="tel:{{ user.doctor.phone_number }}" class="uk-icon-button" uk-icon="receiver"></a> {{ user.doctor.phone_number }}</p>
+                {% endif %}
+
+                {% if user.doctor.email %}
+                    <p><a href="mailto:{{ user.doctor.email }}" class="uk-icon-button" uk-icon="mail"></a> {{ user.doctor.email }}</p>
+                {% endif %}
+            </div>
+            <div class="uk-width-1-1 uk-child-width-1-1@m uk-margin-remove" uk-grid="masonry: true">
+                <div class="uk-card uk-card-hover uk-margin-small-top uk-card-default uk-card-body">
+                    <h3 class="uk-card-title uk-button-text uk-text-bold">
+                        My Appointments
+                    </h3>
+                    <table class="uk-table uk-table-responsive uk-table-hover uk-table-divider">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Remark</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for happ in happs %}
+                            <tr style="cursor: pointer" href="#{{ happ.id }}appointment-modal" uk-toggle>
+                                <td>
+                                    {% if happ.patient.user.profile.avatar %}
+                                        <img src="{{ happ.patient.user.profile.avatar_small }}" class="uk-border-circle" width="30" height="30">
+                                    {% elif user.hospital %}
+                                        <img src="{% static 'images/hospital-default-avtar.png' %}" class="uk-border-circle" width="30" height="30">
+                                    {% else %}
+                                        {% if happ.patient.user.profile.gender == 'f' %}
+                                            <img src="{% static 'images/female.png' %}" class="uk-border-circle" width="30" height="30">
+                                        {% else %}
+                                            <img src="{% static 'images/anon.png' %}" class="uk-border-circle" width="30" height="30">
+                                        {% endif %}
+                                    {% endif %}
+                                    <span> </span>
+                                    <a class="uk-text-bold uk-button uk-button-text">{{ happ.patient.user.first_name }}</a>
+                                </td>
+                                <td>{{ happ.patients_remarks }}</td>
+                                <td>
+                                    {% if happ.start_date or happ.end_date %}
+                                        {{ happ.start_date }} to {{ happ.end_date }}
+                                    {% else %}
+                                        Not Available
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if not happ.approved %}
+                                        <span class="uk-badge uk-label-warning uk-padding-small">Pending</span>
+                                    {% else %}
+                                        <span class="uk-badge uk-label-success uk-padding-small">Approved</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {% for happ in happs %}
+            <div id="{{ happ.id }}appointment-modal" uk-modal>
+                <div class="uk-modal-dialog">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <div class="uk-modal-header">
+                        <h2 class="uk-modal-title">Appointment Description</h2>
+                    </div>
+                    <div class="uk-modal-body">
+                        <h3 class="uk-text-meta">Age: {{ happ.patient.user.profile.get_age }} Sex: {{ happ.patient.user.profile.get_gender_display }}</h3>
+                        <p>{{ happ.patients_remarks }}</p>
+                        <br>
+                        Current Status :
+                        {% if happ.approved %}
+                            <span class="uk-badge uk-label-success uk-padding-small">Approved</span>
+                        {% elif happ.rejected %}
+                            <span class="uk-badge uk-label-danger uk-padding-small">Rejected</span>
+                        {% else %}
+                            <span class="uk-badge uk-label-warning uk-padding-small">Pending</span>
+                        {% endif %}
+                    </div>
+                    <div class="uk-modal-footer uk-text-center">
+                        <button class="uk-button uk-border-pill uk-margin-right uk-button-danger" onclick="editAppointment('{% url 'hospital:appointment-reject' happ.id %}')" type="button">Reject</button>
+                        <button class="uk-button uk-border-pill uk-button-primary" onclick="editAppointment('{% url 'hospital:appointment-approve' happ.id %}')" type="button">Approve</button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <script>
+        function editAppointment(url) {
+            window.location = window.location.origin + url;
+        }
+    </script>
+{% endblock %}

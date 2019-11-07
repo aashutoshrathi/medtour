@@ -2,6 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.core.mail import send_mail
+from medtour import settings
 from hospital.filters import DoctorSpecFilter
 from hospital.forms import AppointmentForm
 from landing.models import City, Profile
@@ -65,6 +69,17 @@ class DoctorHome(View):
         })
 
 
+def send_appointment_mails(doctor, patient):
+    patient_name = patient.user.first_name
+    subject = '[New] Appointment with {}'.format(patient)
+    from_email = settings.EMAIL_HOST_USER
+    message = render_to_string('emails/new_appointment.html',)
+    plain_msg = strip_tags(message)
+    send_mail(subject, plain_msg, from_email, [
+        doctor.user.email], html_message=message, fail_silently=True)
+    return redirect('home')
+
+
 @login_required
 def appoint_doctor(request, slug):
     form = AppointmentForm(request.POST or None)
@@ -73,6 +88,7 @@ def appoint_doctor(request, slug):
         formwa.doctor = Doctor.objects.get(slug=slug)
         formwa.patient = Profile.objects.get(user=request.user)
         form.save()
+        send_appointment_mails(formwa.doctor, formwa.patient)
         return redirect('home')
     return render(request, 'hospital/appointment.html', {'form': form})
 
