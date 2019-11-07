@@ -18,6 +18,7 @@ class AppointmentApprove(View):
         appointment.approved = True
         appointment.rejected = False
         appointment.save()
+        send_approval_mail(appointment)
         return redirect(reverse('home', args=[]))
 
 
@@ -52,7 +53,7 @@ class DoctorHome(View):
         })
 
 
-def send_appointment_mails(doctor, patient):
+def send_appointment_mail(doctor, patient):
     patient_name = patient.user.first_name
     subject = '[New] Appointment with {}'.format(patient)
     from_email = settings.EMAIL_HOST_USER
@@ -60,6 +61,19 @@ def send_appointment_mails(doctor, patient):
     plain_msg = strip_tags(message)
     send_mail(subject, plain_msg, from_email, [
         doctor.user.email], html_message=message, fail_silently=True)
+    return redirect('home')
+
+
+def send_approval_mail(appointment):
+    patient = appointment.patient.user.first_name
+    doctor = appointment.doctor.user.first_name
+    subject = '[CONFIRMED] Appointment with {}'.format(doctor)
+    from_email = settings.EMAIL_HOST_USER
+    message = render_to_string('emails/approved_appointment.html',
+                               {'patient': patient, 'doctor': doctor, 'appointment': appointment})
+    plain_msg = strip_tags(message)
+    send_mail(subject, plain_msg, from_email, [
+        appointment.patient.user.email], html_message=message, fail_silently=True)
     return redirect('home')
 
 
@@ -71,7 +85,7 @@ def appoint_doctor(request, slug):
         formwa.doctor = Doctor.objects.get(slug=slug)
         formwa.patient = Profile.objects.get(user=request.user)
         form.save()
-        send_appointment_mails(formwa.doctor, formwa.patient)
+        send_appointment_mail(formwa.doctor, formwa.patient)
         return redirect('home')
     return render(request, 'hospital/appointment.html', {'form': form})
 
