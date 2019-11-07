@@ -15,14 +15,14 @@
                 {% endif %}>
             </div>
             <div class="uk-width-1-5@s">
-                <a id="hospital-filter-button" class="uk-button uk-border-pilled uk-padding-remove-left uk-padding-remove-right uk-button-secondary" href="#">search <span uk-icon=" icon: search;"></span></a>
+                <a id="hospital-filter-button" class="uk-button uk-border-rounded uk-padding-remove-left uk-padding-remove-right uk-button-secondary" href="#">search <span uk-icon=" icon: search;"></span></a>
             </div>
         </div>
         <div class="uk-child-width-1-4@m uk-grid-small uk-grid-match" uk-grid>
             {% if hospitals %}
                 {% for hospital in hospitals %}
                     <div>
-                        <div class="uk-card hover-shadow-card uk-card-secondary uk-padding-small uk-border-pilled">
+                        <div class="uk-card hover-shadow-card uk-card-secondary uk-padding-small uk-border-rounded">
                             <h3 class="uk-card-title"> <a class="uk-link-heading" href="{{ hospital.get_url }}">{{ hospital.name }}</a></h3>
                             <div class="uk-card-body uk-padding-remove">
                                 <p>

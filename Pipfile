@@ -18,7 +18,7 @@ whitenoise = "*"
 sendgrid = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7.4"
 
 [dev-packages]
 autopep8 = "*"

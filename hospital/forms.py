@@ -7,7 +7,7 @@ from django import forms
 class AppointmentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AppointmentForm, self).__init__(*args, **kwargs)
-        self.fields['start_date'].label = 'Start time'
+        self.fields['start_date'].label = 'Begin time'
         self.fields['end_date'].label = 'End time'
         self.fields['patients_remarks'].label = 'Remarks'
 

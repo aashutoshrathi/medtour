@@ -20,15 +20,15 @@
                     <div class="uk-card-body">
                         <h3 class="uk-card-title">{{ doctor }}</h3>
                         <p>{{ doctor.get_all_spec }}</p>
-                        <a class="uk-button uk-button-secondary uk-border-pilled" href="{% url 'hospital:appoint-doctor' doctor.slug %}">Book an appointment</a> at
+                        <a class="uk-button uk-button-secondary uk-border-pill" href="{% url 'hospital:appoint-doctor' doctor.slug %}">Book an appointment</a> at
                         <a class="uk-link-muted" href="{{ doctor.hospital.get_url }}">{{ doctor.hospital }}</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div>
+        <!-- <div>
             <div class="uk-width-1-1@m uk-margin-medium-top">
-                <ul class="uk-child-width-expand uk-width-1-1@l uk-text-center uk-border-pilled uk-subnav uk-subnav-pill uk-margin-auto" uk-switcher="animation: uk-animation-slide-top-small, uk-animation-slide-top-medium; duration: 200;">
+                <ul class="uk-child-width-expand uk-width-1-1@l uk-text-center uk-border-rounded uk-subnav uk-subnav-pill uk-margin-auto" uk-switcher="animation: uk-animation-slide-top-small, uk-animation-slide-top-medium; duration: 200;">
                     <li class="uk-active uk-padding-remove uk-text-center"><a href="#">Profile Overview</a></li>
                     <li class="uk-padding-remove-right uk-padding-remove uk-text-center"><a href="#">Photos</a></li>
                     <li class="uk-padding-remove-right uk-padding-remove uk-text-center"><a href="#">Reviews</a></li>
@@ -57,6 +57,6 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div> -->
     </div>
 {% endblock %}
