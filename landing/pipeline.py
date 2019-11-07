@@ -22,7 +22,6 @@ def get_profile(backend, user, response, details, *args, **kwargs):
                 if not profile.gender:
                     profile.gender = 'n'
     elif backend.name == "google-oauth2":
-        # print(response)
         print(response)
         if response['picture']:
             small_url = response['picture']

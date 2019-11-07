@@ -53,7 +53,7 @@ class HospitalHome(View):
             'doctors': doctors,
             'specs': specs,
             'hospital': hospital,
-            'filter': doctors_filter,
+            'filter': doctors_filter
         })
 
 
@@ -76,9 +76,11 @@ def appoint_doctor(request, slug):
         return redirect('home')
     return render(request, 'hospital/appointment.html', {'form': form})
 
+
 class HospitalsAll(View):
     def get(self, request):
         search_box_city_value = None
+        message = None
         if 'q' in request.GET:
             search_box_city_value = request.GET['q']
         hospitals = Hospital.objects.all()
@@ -88,7 +90,11 @@ class HospitalsAll(View):
             city_name = search_box_city_value_trimmed.split(',')
             city = get_object_or_404(City, name=city_name[0])
             hospitals = Hospital.objects.filter(user__profile__city=city)
+        if not request.user.is_anonymous:
+            if not request.user.profile.city:
+                message = "Please add city to your profile, for better visibility on platform."
         return render(request, 'hospital/hospital-list.html', {
             'hospitals': hospitals,
             'search_box_city_value': search_box_city_value,
+            'message': message
         })

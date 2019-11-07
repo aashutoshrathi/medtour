@@ -3,7 +3,7 @@ url = "https://pypi.python.org/simple"
 verify_ssl = true
 
 [packages]
-django = "*"
+django = "==2.0.6"
 gunicorn = "*"
 django-heroku = "*"
 django-progressive-web-app = "*"
@@ -17,7 +17,7 @@ django-livesync = "*"
 whitenoise = "*"
 
 [requires]
-python_version = "3.7.4"
+python_version = "3.6"
 
 [dev-packages]
 autopep8 = "*"
