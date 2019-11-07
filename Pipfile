@@ -15,6 +15,7 @@ django-filter = '*'
 django-datetime-widget = '*'
 django-livesync = "*"
 whitenoise = "*"
+sendgrid = "*"
 
 [requires]
 python_version = "3.6"

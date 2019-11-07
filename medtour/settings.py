@@ -25,6 +25,9 @@ EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('SG_API_KEY')
 EMAIL_PORT = config('EMAIL_PORT')
+FROM_EMAIL = 'MedTour Support<support@medtour.com>'
+EMAIL_SENT_STRING = 'Confirmation Email has been sent to your email address, please click on link in mail to register.'
+INVALID_ACTIVATION_STRING = 'The confirmation link was invalid, possibly because it has already been used.'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SKEY')
@@ -70,7 +73,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 DJANGO_LIVESYNC = {
-    'PORT': 8000 # this is optional and is default set to 9001.
+    'PORT': 8000  # this is optional and is default set to 9001.
 }
 
 ROOT_URLCONF = 'medtour.urls'
@@ -208,4 +211,5 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email']
 CITIES_LIGHT_APP_NAME = 'landing'
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en']
 CITIES_LIGHT_INCLUDE_COUNTRIES = ['IN']
-CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
+CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3',
+                                   'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT', ]

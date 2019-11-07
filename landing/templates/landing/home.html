@@ -119,7 +119,9 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if not happ.approved %}
+                                    {% if happ.rejected %}
+                                        <span class="uk-badge uk-label-danger uk-padding-small">Rejected</span>
+                                    {% elif not happ.approved %}
                                         <span class="uk-badge uk-label-warning uk-padding-small">Pending</span>
                                     {% else %}
                                         <span class="uk-badge uk-label-success uk-padding-small">Approved</span>
@@ -184,7 +186,9 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if not happ.approved %}
+                                    {% if happ.rejected %}
+                                        <span class="uk-badge uk-label-danger uk-padding-small">Rejected</span>
+                                    {% elif not happ.approved %}
                                         <span class="uk-badge uk-label-warning uk-padding-small">Pending</span>
                                     {% else %}
                                         <span class="uk-badge uk-label-success uk-padding-small">Approved</span>

@@ -44,6 +44,14 @@
                 </p>
             </div>
         {% endif %}
+        {% if good_message %}
+            <div class="uk-alert-success uk-margin-remove" uk-alert>
+                <a class="uk-alert-close" uk-close></a>
+                <p class="uk-text-center">
+                    {{ good_message }}
+                </p>
+            </div>
+        {% endif %}
         <header>
             <div uk-sticky="show-on-up: true; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar; animation: uk-animation-slide-top;">
                 <nav class="uk-navbar-container uk-box-shadow-medium" uk-navbar style="position: relative;">
@@ -72,7 +80,6 @@
                             {% endif %}
                             {% if user.is_authenticated %}
                             {% if user.hospital %}
-                                <li class="uk-active"><a href="{% url 'hospital:appointment-list' %}">Appointments</a></li>
                                 <li class="uk-active"><a class="uk-text-warning" href="{% url 'complete_hospital_profile' %}">Edit Hospital Profile</a></li>
                             {% endif %}
                                 <li class="uk-active">
@@ -139,16 +146,13 @@
                         <li><a href="{% url 'home' %}"><span class="uk-margin-small-right" uk-icon="icon: home;"></span> Home</a></li>
                         <li><a href="{% url 'hospital:list-hospitals' %}" class=""><span class="uk-margin-small-right  uk-text-danger" uk-icon="icon: lifesaver;"></span>Hospitals</a></li>
                         {% if user.is_authenticated %}
-                            <li><a href="{% url 'hospital:appointment-list' %}"><span class="uk-margin-small-right" uk-icon="icon: home;"></span> Appointments</a></li>
                             <li><a href="{% url 'overview' %}"><span class="uk-margin-small-right" uk-icon="icon: happy;"></span> Profile</a></li>
                             <li><a href="{% url 'password' %}"><span class="uk-margin-small-right" uk-icon="icon: pencil;"></span> Change Password</a></li>
                             <li><a href="{% url 'username' %}"><span class="uk-margin-small-right" uk-icon="icon: pencil;"></span> Change Username</a></li>
                             <li><a href="{% url 'logout' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-out;"></span> Logout</a></li>
                         {% else %}
-                            <li class="uk-active"><a href="{% url 'login' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-in;"></span> Login</a></li>
-                        {% endif %}
-                        {% if not user.is_authenticated %}
                             <li><a href="{% url 'signup' %}"><span class="uk-margin-small-right" uk-icon="icon: plus-circle;"> Hospital Sign Up</span></a></li>
+                            <li class="uk-active"><a href="{% url 'login' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-in;"></span> Login</a></li>
                         {% endif %}
                     </ul>
                 </div>

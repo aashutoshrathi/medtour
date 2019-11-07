@@ -12,17 +12,6 @@ from landing.models import City, Profile
 from .models import Hospital, Doctor, Appointment
 
 
-class AppointmentOperations(View):
-    def get(self, request):
-        hospital = request.user.hospital
-        doctors = Doctor.objects.filter(hospital=hospital)
-        appointments = Appointment.objects.filter(doctor__in=doctors)
-        return render(request, 'hospital/appointments-list.html', {
-            'hospital': hospital,
-            'appointments': appointments,
-        })
-
-
 class AppointmentApprove(View):
     def get(self, request, id):
         appointment = Appointment.objects.get(id=id)
@@ -88,9 +77,8 @@ def appoint_doctor(request, slug):
 
 
 class HospitalsAll(View):
-    def get(self, request):
+    def get(self, request, message=None, good_message=None):
         search_box_city_value = None
-        message = None
         if 'q' in request.GET:
             search_box_city_value = request.GET['q']
         hospitals = Hospital.objects.all()
@@ -100,11 +88,23 @@ class HospitalsAll(View):
             city_name = search_box_city_value_trimmed.split(',')
             city = get_object_or_404(City, name=city_name[0])
             hospitals = Hospital.objects.filter(user__profile__city=city)
-        if not request.user.is_anonymous:
+        if not request.user.is_anonymous and not message:
             if not request.user.profile.city:
                 message = "Please add city to your profile, for better visibility on platform."
         return render(request, 'hospital/hospital-list.html', {
             'hospitals': hospitals,
             'search_box_city_value': search_box_city_value,
-            'message': message
+            'message': message,
+            'good_message': good_message
+        })
+
+    def post(self, request, message=None, good_message=None):
+        hospitals = Hospital.objects.all()
+        if not request.user.is_anonymous:
+            if not request.user.profile.city:
+                message = "Please add city to your profile, for better visibility on platform."
+        return render(request, 'hospital/hospital-list.html', {
+            'hospitals': hospitals,
+            'message': message,
+            'good_message': good_message
         })

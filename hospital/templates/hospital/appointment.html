@@ -7,7 +7,7 @@
 
 {% block body %}
     {{ form.media }}
-        <div class="uk-card-hover uk-border-rounded uk-card-default uk-card-body uk-width-1-2@m uk-margin-top uk-align-center">
+        <div class="uk-card-hover uk-border-pilled uk-card-default uk-card-body uk-width-1-2@m uk-margin-top uk-align-center">
              <form enctype="multipart/form-data" class="uk-table-responsive entry-input-form" action="#" method="post" novalidate>
                 {% csrf_token %}
                 <table class="uk-table">
@@ -32,8 +32,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <input class="uk-width-auto uk-button uk-button-secondary uk-margin-small uk-align-center uk-border-rounded" type="reset" value="Clear changes"/>
-                <input class="uk-width-auto uk-button uk-button-primary uk-margin-small uk-align-center uk-border-rounded" type="submit" value="Submit" />
+                <input class="uk-width-auto uk-button uk-button-primary uk-margin-small uk-align-center uk-border-pill" type="submit" value="Submit" />
             </form>
         </div>
 {% endblock %}

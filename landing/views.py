@@ -14,11 +14,13 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
 from social_django.models import UserSocialAuth
 from hospital.models import Doctor, Appointment, Hospital
+from hospital.views import HospitalsAll
 from hospital.forms import InviteDocForm
 from landing.models import Region, City, Profile
 from landing.tokens import account_activation_token
 from .forms import ProfileForm, UsernameForm, SignUpForm, HospitalForm
 from medtour import settings
+from landing.utils import sg_mail
 
 
 def land(request):
@@ -78,7 +80,7 @@ def activate(request, uidb64, token):
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('complete_hospital_profile')
     else:
-        return render(request, 'registration/account_activation_invalid.html')
+        return HospitalsAll.as_view()(request, message=settings.INVALID_ACTIVATION_STRING)
 
 
 def account_activation_sent(request):
@@ -104,17 +106,17 @@ def signup(request):
             plain_msg = strip_tags(message)
             send_mail(subject, plain_msg, from_email, [
                       user.email], html_message=message, fail_silently=True)
-            return redirect('account_activation_sent')
+            response = HospitalsAll.as_view()(request, good_message=settings.EMAIL_SENT_STRING)
+            return response
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
 
 class HomeView(View):
-    def get(self, request):
+    def get(self, request, message=None, good_message=None):
         doctors = None
         hospital_appointments = None
-        message = None
         try:
             if request.user.hospital:
                 if not request.user.hospital.user.profile.city:
@@ -127,7 +129,8 @@ class HomeView(View):
                 return render(request, 'landing/home.html', {'doctors': doctors,
                                                              'happs': hospital_appointments,
                                                              'form': form,
-                                                             'message': message
+                                                             'message': message,
+                                                             'good_message': good_message
                                                              })
         except Hospital.DoesNotExist:
             pass
@@ -137,7 +140,8 @@ class HomeView(View):
                 doctor = Doctor.objects.get(slug=slug)
                 doc_appointments = Appointment.objects.filter(
                     doctor=doctor)
-                return render(request, 'landing/doc_home.html', {'happs': doc_appointments})
+                return render(request, 'landing/doc_home.html', {'happs': doc_appointments, 'message': message,
+                                                                 'good_message': good_message})
         except Doctor.DoesNotExist:
             pass
         patient_appointments = Appointment.objects.filter(
@@ -145,9 +149,11 @@ class HomeView(View):
         return render(request, 'landing/patient_home.html', {'doctors': doctors,
                                                              'happs': hospital_appointments,
                                                              'papps': patient_appointments,
+                                                             'message': message,
+                                                             'good_message': good_message
                                                              })
 
-    def post(self, request):
+    def post(self, request, message=None, good_message=None):
         form = InviteDocForm(request.POST or None)
         if form.is_valid():
             doctor = form.save(commit=False)
@@ -156,7 +162,8 @@ class HomeView(View):
             doctor.slug = doctor.user.username
             form.save()
             return redirect('home')
-        return render(request, 'landing/home.html', {'form': form})
+        return render(request, 'landing/home.html', {'form': form, 'message': message,
+                                                     'good_message': good_message})
 
 
 # only4 testing
