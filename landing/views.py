@@ -57,7 +57,6 @@ class ChangeUsername(View):
             update_session_auth_hash(request, request.user)
             return redirect('username')
         else:
-            print(request.user.username)
             messages.error(
                 request, 'Username is already taken, please try another one.')
         return render(request, 'landing/username.html', {'form': form})
