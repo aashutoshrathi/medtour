@@ -117,8 +117,11 @@ class HomeView(View):
     def get(self, request):
         doctors = None
         hospital_appointments = None
+        message = None
         try:
             if request.user.hospital:
+                if not request.user.hospital.user.profile.city:
+                    message = "Please add city to your profile, for better visibility on platform."
                 hospital = request.user.hospital
                 doctors = Doctor.objects.filter(hospital=hospital)
                 hospital_appointments = Appointment.objects.filter(
@@ -126,7 +129,8 @@ class HomeView(View):
                 form = InviteDocForm(request.POST or None)
                 return render(request, 'landing/home.html', {'doctors': doctors,
                                                              'happs': hospital_appointments,
-                                                             'form': form
+                                                             'form': form,
+                                                             'message': message
                                                              })
         except Hospital.DoesNotExist:
             pass

@@ -35,6 +35,15 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
     <body>
         <div id="spinner"></div>
+        {% if message %}
+            <div class="uk-alert-danger uk-margin-remove" uk-alert>
+                <a class="uk-alert-close" uk-close></a>
+                <p class="uk-text-center">
+                    <span uk-icon="icon: warning;"></span> 
+                    {{ message }}
+                </p>
+            </div>
+        {% endif %}
         <header>
             <div uk-sticky="show-on-up: true; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar; animation: uk-animation-slide-top;">
                 <nav class="uk-navbar-container uk-box-shadow-medium" uk-navbar style="position: relative;">
