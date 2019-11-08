@@ -27,7 +27,7 @@ class AppointmentForm(forms.ModelForm):
         dateTimeOptions = {
             'autoclose': True,
             'startDate': str(datetime.datetime.today().date()),
-            'endDate': str(datetime.datetime.today().date() + datetime.timedelta(7)),
+            'endDate': str(datetime.datetime.today().date() + datetime.timedelta(1)),
             'format': 'mm/dd/yyyy hh:ii',
         }
         widgets = {
