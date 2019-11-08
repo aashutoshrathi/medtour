@@ -37,7 +37,7 @@
                         </thead>
                         <tbody>
                             {% for happ in happs %}
-                            <tr style="cursor: pointer" href="#{{ happ.id }}appointment-modal" uk-toggle>
+                            <tr style="cursor: pointer" href="#appointment-modal-{{ happ.id }}" uk-toggle>
                                 <td>
                                     {% if happ.patient.user.profile.avatar %}
                                         <img src="{{ happ.patient.user.profile.avatar_small }}" class="uk-border-circle" width="30" height="30">
@@ -79,7 +79,7 @@
         </div>
 
         {% for happ in happs %}
-            <div id="{{ happ.id }}appointment-modal" uk-modal>
+            <div id="appointment-modal-{{ happ.id }}" uk-modal>
                 <div class="uk-modal-dialog">
                     <button class="uk-modal-close-default" type="button" uk-close></button>
                     <div class="uk-modal-header">
